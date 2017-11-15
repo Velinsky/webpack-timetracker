@@ -5,6 +5,8 @@
 
 # User-specific stuff:
 .idea/
+plugin/*.js
+plugin/*.js.map
 
 # CMake
 cmake-build-debug/

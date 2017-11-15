@@ -1,4 +1,5 @@
 let path = require('path');
+let TimeTracker = require('./plugin/main.js');
 
 module.exports = {
 	entry: './testapp/entry.js',
@@ -8,5 +9,9 @@ module.exports = {
 	},
 	devServer: {
 		publicPath: '/out/'
-	}
+	},
+	plugins: [new TimeTracker({
+		forceCwd: __dirname,
+	})]
+
 };

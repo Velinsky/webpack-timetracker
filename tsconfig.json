@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "sourceMap": true
+  },
+  "files": [
+    "./node_modules/@types/node/index.d.ts",
+    "./node_modules/@types/webpack/index.d.ts"
+  ],
+  "include": [
+    "plugin/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
