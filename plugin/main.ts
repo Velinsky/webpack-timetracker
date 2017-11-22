@@ -1,17 +1,25 @@
-import { compiler } from '../node_modules/@types/webpack/index';
+import { compiler } from 'webpack';
+import Writer from './writer';
 
-interface pluginOptions {
+export interface pluginOptions {
 	forceCwd: string,
 }
 
-function HelloWorldPlugin(options: pluginOptions) {
-	let cwd: string = options.forceCwd || process.cwd();
+class TimetrackerPlugin {
+	private writer: Writer;
+
+	constructor(options: pluginOptions) {
+		let cwd: string = options.forceCwd || process.cwd();
+
+		this.writer = new Writer(options)
+	}
+
+	apply(compiler: compiler.Compiler) {
+		compiler.plugin('done', () => {
+			this.writer.writeActivity();
+			console.log(this.writer);
+		});
+	}
 }
 
-HelloWorldPlugin.prototype.apply = function (compiler: compiler.Compiler) {
-	compiler.plugin('done', function () {
-		console.log('compiling over');
-	});
-};
-
-module.exports = HelloWorldPlugin;
+module.exports = TimetrackerPlugin;
