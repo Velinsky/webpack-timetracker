@@ -1,17 +1,25 @@
 import { compiler } from 'webpack';
 import Writer from './writer';
+import Reader from './reader';
 
 export interface pluginOptions {
 	forceCwd: string,
 }
 
+export interface pluginDerivedOptions {
+	cwd: string,
+}
+
 class TimetrackerPlugin {
 	private writer: Writer;
+	private reader: Reader;
 
 	constructor(options: pluginOptions) {
 		let cwd: string = options.forceCwd || process.cwd();
+		let derivedOptions: pluginDerivedOptions = { cwd };
 
-		this.writer = new Writer(options)
+		this.writer = new Writer(options, derivedOptions)
+		this.reader = new Reader(options, derivedOptions)
 	}
 
 	apply(compiler: compiler.Compiler) {
