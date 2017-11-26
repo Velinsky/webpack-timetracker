@@ -1,10 +1,10 @@
-import {pluginDerivedOptions, pluginOptions} from "./main";
+import {PluginDerivedOptions, PluginOptions} from "./main";
 
 export default class Reader {
-	private options: pluginOptions;
-	private derivedOptions: pluginDerivedOptions;
+	private options: PluginOptions;
+	private derivedOptions: PluginDerivedOptions;
 
-	constructor(cfg: pluginOptions, derivedCfg: pluginDerivedOptions) {
+	constructor(cfg: PluginOptions, derivedCfg: PluginDerivedOptions) {
 		this.options = cfg;
 		this.derivedOptions = derivedCfg;
 	}

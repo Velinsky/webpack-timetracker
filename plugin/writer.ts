@@ -1,28 +1,27 @@
 import {readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync} from 'fs';
 import {join} from 'path';
-import {unless} from 'ramda';
+import {unless, memoize} from 'ramda';
 
-import {pluginDerivedOptions, pluginOptions} from "./main";
+import {PluginDerivedOptions, PluginOptions} from "./main";
 
-const createIfNotExists = (cwd) => (path) => {
-	return unless(
-		existsSync,
-		mkdirSync
-	)(join(cwd, path))
-};
+const createIfNotExists = (cwd) => (path) => unless(
+	existsSync,
+	mkdirSync
+)(join(cwd, path));
 
 export default class Writer {
-	private options: pluginOptions;
-	private derivedOptions: pluginDerivedOptions;
+	private options: PluginOptions;
+	private derivedOptions: PluginDerivedOptions;
 
-	constructor(cfg: pluginOptions, derivedCfg: pluginDerivedOptions) {
+	constructor(cfg: PluginOptions, derivedCfg: PluginDerivedOptions) {
 		this.options = cfg;
 		this.derivedOptions = derivedCfg;
 
 		// check structure
 		let createLocal = createIfNotExists(this.derivedOptions.cwd);
 
-		createLocal('.webpacktime');
+
+		createLocal(this.options.directoryName);
 	}
 
 	writeActivity() {
