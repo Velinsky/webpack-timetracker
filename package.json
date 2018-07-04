@@ -2,11 +2,11 @@
   "name": "webpack-timetracker",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/main.js",
   "scripts": {
     "start": "webpack-dev-server",
     "start:ts": "tsc --watch",
-    "build": "webpack",
+    "build": "tsc --outDir dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
