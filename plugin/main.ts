@@ -1,9 +1,13 @@
 import { compiler } from 'webpack';
-import {execSync} from "child_process";
-import {memoize} from 'ramda';
+import { execSync } from 'child_process';
+import { memoize } from 'ramda';
 
 import Writer from './writer';
 import Reader from './reader';
+
+import * as betterlog from 'better-log';
+
+betterlog.setConfig({depth: 2});
 
 enum UsernameStrategy {
 	GitEmail = 'gitemail',
@@ -22,7 +26,7 @@ export interface PluginOptions {
 	usernameStrategy: UsernameStrategy,
 }
 
-let defaultOptions:PluginOptions = {
+let defaultOptions: PluginOptions = {
 	forceCwd: undefined,
 	directoryName: '.webpacktime',
 	usernameStrategy: UsernameStrategy.GitEmail,
@@ -43,16 +47,20 @@ class TimetrackerPlugin {
 
 		let cwd: string = options.forceCwd || process.cwd();
 		let userId = execSync(commandMap[options.usernameStrategy]).toString().trim();
-		let derivedOptions: PluginDerivedOptions = { cwd, userId };
+		let derivedOptions: PluginDerivedOptions = {cwd, userId};
 
 		this.writer = new Writer(options, derivedOptions);
 		this.reader = new Reader(options, derivedOptions);
 	}
 
 	apply(compiler: compiler.Compiler) {
-		compiler.plugin('done', () => {
-			this.writer.writeActivity();
-			console.log(this.writer);
+		compiler.plugin('watch-run', (watching, done) => {
+			const changedTimes = watching.compiler.watchFileSystem.watcher.mtimes;
+			const changedFiles:string[] = Object
+				.keys(changedTimes);
+
+			this.writer.writeActivity(changedFiles);
+			done();
 		});
 	}
 }

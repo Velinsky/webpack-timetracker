@@ -1,1 +1,4 @@
-console.log('test 23d');
+let x = require('./second')
+
+console.log('log from me fffffffff');
+
