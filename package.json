@@ -1,13 +1,14 @@
 {
   "name": "webpack-timetracker",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "dist/main.js",
   "scripts": {
     "start": "webpack-dev-server",
     "start:ts": "tsc --watch",
     "build": "tsc --outDir dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
   },
   "author": "",
   "license": "ISC",
