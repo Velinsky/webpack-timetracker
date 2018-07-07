@@ -8,3 +8,4 @@ Webpack plugin to track time spent working on a project and individual files.
  - Username strategy can be automatically detected
    - make sure that username won't change during development though
    - implement mergeusernames in config to report multiple users as a single user
+ - detect file changes by git checkout (and similar) to prevent tracking polution
