@@ -5,10 +5,6 @@ import { memoize } from 'ramda';
 import Writer from './writer';
 import Reader from './reader';
 
-import * as betterlog from 'better-log';
-
-betterlog.setConfig({depth: 2});
-
 enum UsernameStrategy {
 	GitEmail = 'gitemail',
 	GitName = 'gitname',
