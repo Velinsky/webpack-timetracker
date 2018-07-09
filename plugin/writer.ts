@@ -2,6 +2,7 @@ import { readFileSync, readdirSync, writeFileSync, existsSync, mkdirSync } from 
 import { join } from 'path';
 import { unless, memoize } from 'ramda';
 import * as fs from 'fs';
+import * as moment from 'moment';
 
 import { PluginDerivedOptions, PluginOptions } from './main';
 
@@ -32,7 +33,8 @@ export default class Writer {
 			// surround with ", in case theres a dash (,) in the filename
 			.map((file) => `"${file}"`);
 
-		let csvData = [(new Date).toISOString(), '[wtt-files]'].concat(filenames);
+		let formattedDate = moment().format('YYYY-MM-DD HH:mm:ss ZZ');
+		let csvData = [formattedDate, '[wtt-files]'].concat(filenames);
 		let path = this.derivedOptions.cwd + '/' + this.options.directoryName + '/' + this.derivedOptions.userId;
 		fs.appendFileSync(path, csvData.join(',') + '\n');
 	}
