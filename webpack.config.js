@@ -1,5 +1,5 @@
 let path = require('path');
-let TimeTracker = require('./plugin/main.js');
+let TimeTracker = require('./src/main.js');
 
 module.exports = {
 	entry: './testapp/entry.js',

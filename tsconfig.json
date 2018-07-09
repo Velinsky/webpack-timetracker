@@ -9,7 +9,7 @@
     "./node_modules/@types/webpack/index.d.ts"
   ],
   "include": [
-    "plugin/**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
     "node_modules"
