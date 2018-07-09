@@ -8,7 +8,7 @@
     "start:ts": "tsc --watch",
     "build": "tsc --outDir dist",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish4": "npm run build"
+    "prepublishOnly": "npm run build"
   },
   "author": "",
   "license": "ISC",

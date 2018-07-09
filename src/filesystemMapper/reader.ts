@@ -1,4 +1,4 @@
-import {PluginDerivedOptions, PluginOptions} from "./main";
+import {PluginDerivedOptions, PluginOptions} from "../main";
 
 export default class Reader {
 	private options: PluginOptions;

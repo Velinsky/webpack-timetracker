@@ -2,8 +2,8 @@ import { compiler } from 'webpack';
 import { execSync } from 'child_process';
 import { memoize } from 'ramda';
 
-import Writer from './writer';
-import Reader from './reader';
+import Writer from './filesystemMapper/writer';
+import Reader from './filesystemMapper/reader';
 
 enum UsernameStrategy {
 	GitEmail = 'gitemail',

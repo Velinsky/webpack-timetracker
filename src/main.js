@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
-const writer_1 = require("./writer");
-const reader_1 = require("./reader");
+const writer_1 = require("./filesystemMapper/writer");
+const reader_1 = require("./filesystemMapper/reader");
 var UsernameStrategy;
 (function (UsernameStrategy) {
     UsernameStrategy["GitEmail"] = "gitemail";

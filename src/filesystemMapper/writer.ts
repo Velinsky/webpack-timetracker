@@ -4,7 +4,7 @@ import { unless, memoize } from 'ramda';
 import * as fs from 'fs';
 import * as moment from 'moment';
 
-import { PluginDerivedOptions, PluginOptions } from './main';
+import { PluginDerivedOptions, PluginOptions } from '../main';
 
 const createIfNotExists = (cwd) => (path) => unless(
 	existsSync,
