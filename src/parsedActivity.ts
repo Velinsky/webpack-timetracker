@@ -1,7 +1,11 @@
+import { ParsedData } from './parsedData';
+import moment = require('moment');
+
 export interface ParsedActivity {
 	byUser: ParsedActivityUser[],
 	byFile: ParsedActivityFile[],
 	total: ParsedActivityTotal,
+	rawData: ParsedData,
 }
 
 export interface ParsedActivityUser {
@@ -38,5 +42,14 @@ let x:ParsedActivity = {
 	],
 	total: {
 		time: 123
+	},
+	rawData: {
+		users: [{
+			id: 'test',
+			entries: [{
+				files: ['a', 'b'],
+				time: moment()
+			}]
+		}],
 	}
 };

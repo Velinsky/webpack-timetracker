@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
-const writer_1 = require("./writer");
-const reader_1 = require("./reader");
+const writer_1 = require("./mappers/filesystemMapper/writer");
+const reader_1 = require("./mappers/filesystemMapper/reader");
 var UsernameStrategy;
 (function (UsernameStrategy) {
     UsernameStrategy["GitEmail"] = "gitemail";
@@ -13,6 +13,7 @@ let defaultOptions = {
     forceCwd: undefined,
     directoryName: '.webpacktime',
     usernameStrategy: UsernameStrategy.GitEmail,
+    workingThreshold: 15
 };
 const commandMap = {
     [UsernameStrategy.GitEmail]: 'git config user.email',
@@ -27,6 +28,7 @@ class TimetrackerPlugin {
         let derivedOptions = { cwd, userId };
         this.writer = new writer_1.default(options, derivedOptions);
         this.reader = new reader_1.default(options, derivedOptions);
+        let activity = this.reader.readActivity();
     }
     apply(compiler) {
         compiler.plugin('watch-run', (watching, done) => {

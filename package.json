@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "csv-parse": "^2.5.0",
     "moment": "^2.22.2",
     "ramda": "^0.25.0"
   },

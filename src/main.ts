@@ -2,8 +2,10 @@ import { compiler } from 'webpack';
 import { execSync } from 'child_process';
 import { memoize } from 'ramda';
 
-import Writer from './filesystemMapper/writer';
-import Reader from './filesystemMapper/reader';
+import Writer from './mappers/filesystemMapper/writer';
+import Reader from './mappers/filesystemMapper/reader';
+
+import defaultAnalyzer from './timeSpentAnalyzers/defaultTimeSpentAnalyzer';
 
 enum UsernameStrategy {
 	GitEmail = 'gitemail',
@@ -20,12 +22,14 @@ export interface PluginOptions {
 	forceCwd: string,
 	directoryName: string,
 	usernameStrategy: UsernameStrategy,
+	workingThreshold: number
 }
 
 let defaultOptions: PluginOptions = {
 	forceCwd: undefined,
 	directoryName: '.webpacktime',
 	usernameStrategy: UsernameStrategy.GitEmail,
+	workingThreshold: 15
 };
 
 const commandMap = {
@@ -47,6 +51,7 @@ class TimetrackerPlugin {
 
 		this.writer = new Writer(options, derivedOptions);
 		this.reader = new Reader(options, derivedOptions);
+		let activity = this.reader.readActivity();
 	}
 
 	apply(compiler: compiler.Compiler) {
