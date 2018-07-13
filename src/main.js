@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const child_process_1 = require("child_process");
 const writer_1 = require("./mappers/filesystemMapper/writer");
 const reader_1 = require("./mappers/filesystemMapper/reader");
+const defaultTimeSpentAnalyzer_1 = require("./timeSpentAnalyzers/defaultTimeSpentAnalyzer");
 var UsernameStrategy;
 (function (UsernameStrategy) {
     UsernameStrategy["GitEmail"] = "gitemail";
@@ -28,7 +29,9 @@ class TimetrackerPlugin {
         let derivedOptions = { cwd, userId };
         this.writer = new writer_1.default(options, derivedOptions);
         this.reader = new reader_1.default(options, derivedOptions);
-        let activity = this.reader.readActivity();
+        let rawActivity = this.reader.readActivity();
+        let analyzer = new defaultTimeSpentAnalyzer_1.default;
+        let activity = analyzer.analyzeActivity(rawActivity);
     }
     apply(compiler) {
         compiler.plugin('watch-run', (watching, done) => {

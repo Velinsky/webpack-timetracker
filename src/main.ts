@@ -5,7 +5,7 @@ import { memoize } from 'ramda';
 import Writer from './mappers/filesystemMapper/writer';
 import Reader from './mappers/filesystemMapper/reader';
 
-import defaultAnalyzer from './timeSpentAnalyzers/defaultTimeSpentAnalyzer';
+import DefaultAnalyzer from './timeSpentAnalyzers/defaultTimeSpentAnalyzer';
 
 enum UsernameStrategy {
 	GitEmail = 'gitemail',
@@ -51,7 +51,11 @@ class TimetrackerPlugin {
 
 		this.writer = new Writer(options, derivedOptions);
 		this.reader = new Reader(options, derivedOptions);
-		let activity = this.reader.readActivity();
+		let rawActivity = this.reader.readActivity();
+
+		let analyzer = new DefaultAnalyzer;
+		let activity = analyzer.analyzeActivity(rawActivity)
+
 	}
 
 	apply(compiler: compiler.Compiler) {
