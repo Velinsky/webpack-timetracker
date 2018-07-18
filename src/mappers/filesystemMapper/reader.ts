@@ -6,7 +6,7 @@ import moment = require('moment');
 
 import { PluginDerivedOptions, PluginOptions } from '../../main';
 import { ParsedData, ParsedDataEntry, ParsedDataUser } from '../../parsedData';
-import { CSV_FILES_OPCODE } from './filesystemConsts';
+import { CSV_FILES_OPCODE, DATE_FORMAT } from './filesystemConsts';
 import { IReader } from '../IMapper';
 
 export default class Reader implements IReader {
@@ -26,8 +26,11 @@ export default class Reader implements IReader {
 			let input = fs.readFileSync(path.join(dir, file));
 			let output = parse(input.toString(), {relax_column_count: true});
 			let parsedOutput:ParsedDataEntry[] = output.map((entry: string[]) => {
+				// TODO remove in public version
+				let isLegacyFormat = entry[0].includes('Z');
+
 				return {
-					time: moment(entry[0]),
+					time: isLegacyFormat ? moment(entry[0]) : moment(entry[0], DATE_FORMAT),
 					files: entry.slice(entry.indexOf(CSV_FILES_OPCODE) + 1) // take all array elements after the opcode
 				}
 			});

@@ -5,7 +5,7 @@ import * as fs from 'fs';
 import * as moment from 'moment';
 
 import { PluginDerivedOptions, PluginOptions } from '../../main';
-import { CSV_FILES_OPCODE } from './filesystemConsts';
+import { CSV_FILES_OPCODE, DATE_FORMAT } from './filesystemConsts';
 import { IWriter } from '../IMapper';
 
 const createIfNotExists = (cwd) => (path) => unless(
@@ -34,7 +34,7 @@ export default class Writer implements IWriter {
 			// surround with ", in case theres a dash (,) in the filename
 			.map((file) => `"${file}"`);
 
-		let formattedDate = moment().format('YYYY-MM-DD HH:mm:ss ZZ');
+		let formattedDate = moment().format(DATE_FORMAT);
 		let csvData = [formattedDate, CSV_FILES_OPCODE].concat(filenames);
 		let path = this.derivedOptions.cwd + '/' + this.options.directoryName + '/' + this.derivedOptions.userId;
 		fs.appendFileSync(path, csvData.join(',') + '\n');
