@@ -17,8 +17,10 @@ class Reader {
             let input = fs.readFileSync(path.join(dir, file));
             let output = parse(input.toString(), { relax_column_count: true });
             let parsedOutput = output.map((entry) => {
+                // TODO remove in public version
+                let isLegacyFormat = entry[0].includes('Z');
                 return {
-                    time: moment(entry[0]),
+                    time: isLegacyFormat ? moment(entry[0]) : moment(entry[0], filesystemConsts_1.DATE_FORMAT),
                     files: entry.slice(entry.indexOf(filesystemConsts_1.CSV_FILES_OPCODE) + 1) // take all array elements after the opcode
                 };
             });

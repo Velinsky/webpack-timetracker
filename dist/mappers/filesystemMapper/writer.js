@@ -21,7 +21,7 @@ class Writer {
             .map((file) => file.replace(this.derivedOptions.cwd, ''))
             // surround with ", in case theres a dash (,) in the filename
             .map((file) => `"${file}"`);
-        let formattedDate = moment().format('YYYY-MM-DD HH:mm:ss ZZ');
+        let formattedDate = moment().format(filesystemConsts_1.DATE_FORMAT);
         let csvData = [formattedDate, filesystemConsts_1.CSV_FILES_OPCODE].concat(filenames);
         let path = this.derivedOptions.cwd + '/' + this.options.directoryName + '/' + this.derivedOptions.userId;
         fs.appendFileSync(path, csvData.join(',') + '\n');
