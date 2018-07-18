@@ -6,6 +6,7 @@ import Writer from './mappers/filesystemMapper/writer';
 import Reader from './mappers/filesystemMapper/reader';
 
 import DefaultAnalyzer from './timeSpentAnalyzers/defaultTimeSpentAnalyzer';
+import { SimpleConsoleReporer } from './reporters/SimpleConsoleReporer';
 
 enum UsernameStrategy {
 	GitEmail = 'gitemail',
@@ -29,7 +30,7 @@ let defaultOptions: PluginOptions = {
 	forceCwd: undefined,
 	directoryName: '.webpacktime',
 	usernameStrategy: UsernameStrategy.GitEmail,
-	workingThreshold: 15
+	workingThreshold: 15 // in minutes
 };
 
 const commandMap = {
@@ -53,9 +54,11 @@ class TimetrackerPlugin {
 		this.reader = new Reader(options, derivedOptions);
 		let rawActivity = this.reader.readActivity();
 
-		let analyzer = new DefaultAnalyzer;
-		let activity = analyzer.analyzeActivity(rawActivity)
+		let analyzer = new DefaultAnalyzer(options);
+		let activity = analyzer.analyzeActivity(rawActivity);
 
+		let reporter = new SimpleConsoleReporer();
+		reporter.reportActivity(activity);
 	}
 
 	apply(compiler: compiler.Compiler) {

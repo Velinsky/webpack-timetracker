@@ -1,6 +1,6 @@
 {
   "name": "webpack-timetracker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "dist/main.js",
   "scripts": {
@@ -13,8 +13,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chalk": "^2.4.1",
     "csv-parse": "^2.5.0",
     "moment": "^2.22.2",
+    "pad": "^2.1.0",
     "ramda": "^0.25.0"
   },
   "devDependencies": {
