@@ -2,6 +2,7 @@ import { ITimeSpentAnalyzer } from './ITimeSpentAnalyzer';
 import { ParsedData } from '../parsedData';
 import { ParsedActivity, ParsedActivityUser } from '../parsedActivity';
 import { PluginOptions } from '../main';
+import { sortBy, prop } from 'ramda';
 
 export default class DefaultTimeSpentAnalyzer implements ITimeSpentAnalyzer {
 	options:PluginOptions;
@@ -15,6 +16,9 @@ export default class DefaultTimeSpentAnalyzer implements ITimeSpentAnalyzer {
 
 		data.users.forEach(user => {
 			let userTotal = 0;
+
+			user.entries = user.entries.map(entry => ({...entry, timestamp: +entry.time}));
+			user.entries = sortBy(prop('timestamp'), user.entries);
 
 			for (let i = 0; i < user.entries.length; i++) {
 				const entry = user.entries[i].time;
