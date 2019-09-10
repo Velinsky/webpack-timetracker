@@ -8,10 +8,11 @@ import Reader from './mappers/filesystemMapper/reader';
 import DefaultAnalyzer from './timeSpentAnalyzers/defaultTimeSpentAnalyzer';
 import { SimpleConsoleReporer } from './reporters/SimpleConsoleReporer';
 
-enum UsernameStrategy {
+export enum UsernameStrategy {
 	GitEmail = 'gitemail',
 	GitName = 'gitname',
 	WhoAmI = 'unixuser',
+	Test = 'test',
 }
 
 export interface PluginDerivedOptions {
@@ -33,10 +34,13 @@ let defaultOptions: PluginOptions = {
 	workingThreshold: 15 // in minutes
 };
 
-const commandMap = {
+const usernameStrategies = {
 	[UsernameStrategy.GitEmail]: 'git config user.email',
 	[UsernameStrategy.GitName]: 'git config user.name',
-	[UsernameStrategy.WhoAmI]: 'whoami'
+	[UsernameStrategy.WhoAmI]: 'whoami',
+	[UsernameStrategy.Test]: () => new Promise((res, rej) => {
+		res('test');
+	})
 };
 
 class TimetrackerPlugin {
@@ -47,24 +51,39 @@ class TimetrackerPlugin {
 		options = Object.assign(options, defaultOptions);
 
 		let cwd: string = options.forceCwd || process.cwd();
-		let userId = execSync(commandMap[options.usernameStrategy]).toString().trim();
-		let derivedOptions: PluginDerivedOptions = {cwd, userId};
+		let selectedStrategy:any = usernameStrategies[options.usernameStrategy];
+		let userIdPromise:Promise<string>;
 
-		this.writer = new Writer(options, derivedOptions);
-		this.reader = new Reader(options, derivedOptions);
-		let rawActivity = this.reader.readActivity();
+		if (typeof selectedStrategy === 'string') {
+			userIdPromise = Promise.resolve(execSync(selectedStrategy).toString().trim());
+		}
+		else if (selectedStrategy instanceof Promise) {
+			userIdPromise = (<any>selectedStrategy)() ;
+		}
 
-		let analyzer = new DefaultAnalyzer(options);
-		let activity = analyzer.analyzeActivity(rawActivity);
+		userIdPromise.then((userId) => {
+			let derivedOptions: PluginDerivedOptions = {cwd, userId};
 
-		let reporter = new SimpleConsoleReporer();
-		reporter.reportActivity(activity);
+			this.writer = new Writer(options, derivedOptions);
+			this.reader = new Reader(options, derivedOptions);
+			let rawActivity = this.reader.readActivity();
+
+			let analyzer = new DefaultAnalyzer(options);
+			let activity = analyzer.analyzeActivity(rawActivity);
+
+			let reporter = new SimpleConsoleReporer();
+			reporter.reportActivity(activity);
+		});
 	}
 
 	apply(compiler: compiler.Compiler) {
 		compiler.plugin('watch-run', (watching, done) => {
-			const changedTimes = watching.compiler.watchFileSystem.watcher.mtimes;
-			const changedFiles:string[] = Object
+			// older versions of webpack have the watchFileSystem data on compiler object
+			const changedTimes = watching.compiler
+				? watching.compiler.watchFileSystem.watcher.mtimes
+				: watching.watchFileSystem.watcher.mtimes;
+
+			const changedFiles: string[] = Object
 				.keys(changedTimes);
 
 			this.writer.writeActivity(changedFiles);
