@@ -14,7 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^2.4.1",
-    "csv-parse": "^2.5.0",
+    "csv-parse": "^4.4.6",
     "moment": "^2.22.2",
     "pad": "^2.1.0",
     "ramda": "^0.25.0"
