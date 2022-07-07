@@ -1,4 +1,4 @@
-import { compiler } from 'webpack';
+import { Compiler } from 'webpack';
 import { execSync } from 'child_process';
 import { memoize } from 'ramda';
 
@@ -76,7 +76,7 @@ class TimetrackerPlugin {
 		});
 	}
 
-	apply(compiler: compiler.Compiler) {
+	apply(compiler: any) {
 		compiler.plugin('watch-run', (watching, done) => {
 			// older versions of webpack have the watchFileSystem data on compiler object
 			const changedTimes = watching.compiler

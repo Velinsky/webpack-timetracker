@@ -1,4 +1,4 @@
-import * as parse from 'csv-parse/lib/sync'
+import { parse } from 'csv-parse/lib/sync'
 import * as path from 'path'
 import * as fs from 'fs'
 
